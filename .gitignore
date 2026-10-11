@@ -9,3 +9,4 @@ backend/uploads/*
 !backend/uploads/profils/
 backend/uploads/profils/*
 !backend/uploads/profils/default.png
+GitHub/
