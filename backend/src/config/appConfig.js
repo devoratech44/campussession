@@ -2,6 +2,9 @@
 const path = require('path');
 const env = require('./env');
 
+// Dossier des fichiers : le disque Render en production (UPLOAD_ROOT), le dossier backend en local
+const ROOT = process.env.UPLOAD_ROOT || path.join(__dirname, '..', '..');
+
 const num = (v, d) => (v === undefined || v === '' || Number.isNaN(Number(v)) ? d : Number(v));
 
 module.exports = {
@@ -63,10 +66,10 @@ statutConge: 'Congé',
   },
 
   paths: {
-    photos: path.join(__dirname, '..', '..', 'uploads', 'profils'),
-    travaux: path.join(__dirname, '..', '..', 'private', 'travaux'),
-    rendus: path.join(__dirname, '..', '..', 'private', 'rendus'),
-    documents: path.join(__dirname, '..', '..', 'private', 'documents'),
+    photos: path.join(ROOT, 'uploads', 'profils'),
+    travaux: path.join(ROOT, 'private', 'travaux'),
+    rendus: path.join(ROOT, 'private', 'rendus'),
+    documents: path.join(ROOT, 'private', 'documents'),
   },
 
   password: { min: 8, max: 72 },

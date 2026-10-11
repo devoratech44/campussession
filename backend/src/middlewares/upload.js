@@ -11,6 +11,11 @@ fs.mkdirSync(cfg.paths.travaux, { recursive: true });
 fs.mkdirSync(cfg.paths.rendus, { recursive: true });
 fs.mkdirSync(cfg.paths.documents, { recursive: true });
 
+// Photo par défaut : copiée sur le disque au premier démarrage
+const defaultPhoto = require('path').join(cfg.paths.photos, 'default.png');
+const bundledPhoto = require('path').join(__dirname, '..', '..', 'uploads', 'profils', 'default.png');
+if (!fs.existsSync(defaultPhoto) && fs.existsSync(bundledPhoto)) fs.copyFileSync(bundledPhoto, defaultPhoto);
+
 const EXTENSIONS = { 'image/jpeg': '.jpg', 'image/png': '.png' };
 
 const storage = multer.diskStorage({
