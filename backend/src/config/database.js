@@ -10,6 +10,7 @@ const sequelize = new Sequelize(env.db.name, env.db.user, env.db.pass, {
   dialect: 'mysql',
   logging: env.db.logSql ? (sql) => logger.sql('SQL', sql) : false,
   timezone: '+00:00',
+  pool: { max: Number(process.env.DB_POOL_MAX) || 3, min: 0, idle: 10000, acquire: 30000 },
   define: {
     underscored: true,
     timestamps: true,

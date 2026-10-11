@@ -405,27 +405,6 @@ CREATE TABLE IF NOT EXISTS `notification_user` (
 
 SET FOREIGN_KEY_CHECKS = 1;
 
--- =========================================================
--- DONNÉES DE BASE
--- =========================================================
-
--- Filières (niveau déduit du nom)
-INSERT IGNORE INTO `filieres` (`nom`, `niveau`) VALUES
-  ('CIITN 1', 'Niveau 1'),
-  ('CIITN 2', 'Niveau 2'),
-  ('LISD 1',  'Niveau 1'),
-  ('LISD 2',  'Niveau 2'),
-  ('CIST 1',  'Niveau 1'),
-  ('ICC 1',   'Niveau 1');
-
--- Classes (la salle sera renseignée depuis l'interface admin)
-INSERT IGNORE INTO `classes` (`nom`, `annee_academique`) VALUES
-  ('CIITN 1', '2026-2027'),
-  ('CIITN 2', '2026-2027'),
-  ('LISD 1',  '2026-2027'),
-  ('LISD 2',  '2026-2027'),
-  ('CIST 1',  '2026-2027'),
-  ('ICC 1',   '2026-2027');
 
 -- Chaque classe regroupe la filière du même nom
 INSERT IGNORE INTO `classe_filiere` (`classe_id`, `filiere_id`)
@@ -435,7 +414,7 @@ SELECT c.`id`, f.`id` FROM `classes` c JOIN `filieres` f ON f.`nom` = c.`nom`;
 INSERT INTO `users`
   (`role`, `matricule`, `prenom`, `nom`, `email`, `telephone`, `mot_de_passe`, `photo`, `est_verifie`)
 VALUES
-  ('admin', NULL, 'Pape Ibrahima', 'MBAYE', 'campussession1@gmail.com', '+221 76 386 23 67',
+  ('admin', NULL, 'Pape Ibrahima', 'MBAYE', 'campussession1@gmail.com', '+221 78 488 65 38',
    '$2b$10$9c8/pTtB6sFEqQpeDLnuzuRHAaSPdlx5M4ZuMnUz5w.Z/pi.apUYi', 'default.png', 1)
 ON DUPLICATE KEY UPDATE
   `mot_de_passe` = VALUES(`mot_de_passe`),
