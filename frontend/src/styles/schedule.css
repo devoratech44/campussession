@@ -1,0 +1,82 @@
+/* frontend/src/styles/schedule.css */
+
+/* ===================== Grille de l'emploi du temps ===================== */
+.sched-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.sched { --slot-h: 30px; min-width: 780px; }
+.sched.single { min-width: 0; }
+.sched-head, .sched-body { display: grid; grid-template-columns: 58px repeat(var(--cols), minmax(0, 1fr)); }
+.sched-head { position: sticky; top: 0; z-index: 3; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+.sched-dayhead { padding: 0.65rem 0.5rem; text-align: center; font-weight: 800; border-left: 1px solid var(--border); }
+.sched-times > div { height: var(--slot-h); padding: 0.1rem 0.4rem 0 0; text-align: right; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
+.sched-col {
+  position: relative; border-left: 1px solid var(--border); cursor: cell;
+  height: calc(var(--rows) * var(--slot-h));
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--slot-h) - 1px), var(--border) calc(var(--slot-h) - 1px), var(--border) var(--slot-h));
+}
+.sched-col:hover { background-color: color-mix(in srgb, var(--primary) 5%, transparent); }
+.sched-ev {
+  position: absolute; padding: 0.2rem 0.45rem; border: none; border-left: 4px solid rgba(255, 255, 255, 0.55);
+  border-radius: 8px; color: #fff; text-align: left; font: inherit; font-size: 0.76rem; line-height: 1.25;
+  overflow: hidden; cursor: pointer; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+  transition: transform 0.15s var(--ease), box-shadow 0.15s;
+}
+.sched-ev:hover { transform: scale(1.02); z-index: 4; box-shadow: var(--glow); }
+.sched-ev strong, .sched-ev span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sched-ev span { opacity: 0.93; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+.legend-item { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; font-weight: 600; }
+.legend-dot { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
+
+.filters-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); align-items: end; }
+
+/* ===================== Sélecteurs ===================== */
+.picker { position: relative; }
+.picker-list {
+  position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 4px); margin: 0; padding: 0.3rem; list-style: none;
+  max-height: 240px; overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow);
+}
+.picker-list li { padding: 0.55rem 0.7rem; border-radius: 8px; cursor: pointer; min-height: var(--tap); display: flex; flex-direction: column; justify-content: center; }
+.picker-list li:hover { background: var(--surface-2); }
+.picker-list small { color: var(--text-muted); }
+.picked { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: var(--tap); padding: 0 0.5rem 0 0.85rem; border: 1px solid var(--primary); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--primary) 8%, transparent); font-weight: 600; }
+
+.member-list { display: grid; gap: 0.2rem; max-height: 280px; overflow-y: auto; padding: 0.4rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); }
+.member-item { display: flex; align-items: center; gap: 0.6rem; min-height: var(--tap); padding: 0.25rem 0.6rem; border-radius: 10px; cursor: pointer; font-weight: 600; }
+.member-item:hover { background: var(--surface); }
+.member-item input { width: 20px; height: 20px; min-height: 0; padding: 0; accent-color: var(--primary); }
+.member-item small { color: var(--text-muted); font-weight: 400; margin-left: auto; }
+
+/* ===================== Alertes et conflits ===================== */
+.alert-warn { background: color-mix(in srgb, var(--warning) 16%, transparent); color: var(--warning); border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent); }
+.conflict-box { display: flex; flex-direction: column; gap: 0.5rem; }
+.conflict-box ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.3rem; }
+
+/* ===== Lisibilité de la grille ===== */
+.sched { min-width: 0; }
+.sched-corner { position: sticky; left: 0; z-index: 4; background: var(--surface-2); }
+.sched-dayhead.today { color: var(--primary); box-shadow: inset 0 -3px 0 var(--primary); }
+
+.sched-times { position: sticky; left: 0; z-index: 2; background: var(--surface); }
+.sched-times > div { height: var(--slot-h); padding: 0.2rem 0.4rem 0 0; text-align: right; font-size: 0.74rem; color: var(--text-muted); }
+.sched-times > div.hour { font-weight: 800; color: var(--text); }
+.sched-times > div.half { font-weight: 500; opacity: 0.7; }
+
+.sched-now { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid #ef4444; z-index: 3; pointer-events: none; }
+.sched-now::before { content: ''; position: absolute; left: -4px; top: -5px; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
+
+.sched-ev { padding: 0.3rem 0.5rem; font-size: 0.8rem; line-height: 1.3; display: flex; flex-direction: column; gap: 0.1rem; }
+.sched-ev .ev-title {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  white-space: normal; overflow: hidden; font-size: 0.84rem; line-height: 1.2;
+}
+.sched-ev .ev-line { display: block; white-space: normal; overflow: hidden; text-overflow: ellipsis; overflow-wrap: anywhere; }
+.sched-ev .ev-time { font-weight: 700; opacity: 1; }
+.sched-ev.sm { padding: 0.15rem 0.45rem; justify-content: center; }
+.sched-ev.sm .ev-one { white-space: nowrap; }
+.sched-ev:hover { z-index: 5; }
+/* ===== Blocs toujours en détail complet ===== */
+.sched-times > div { height: auto; }
+.sched-ev.lg { padding: 0.35rem 0.5rem; justify-content: flex-start; overflow: hidden; }
+.sched-ev.lg .ev-title { -webkit-line-clamp: 3; }
+.sched-ev.lg .ev-line { white-space: normal; overflow-wrap: anywhere; }

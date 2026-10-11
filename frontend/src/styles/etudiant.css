@@ -1,0 +1,35 @@
+/* frontend/src/styles/etudiant.css */
+.gauge { display: flex; flex-direction: column; gap: 0.45rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.gauge__top { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+.gauge__top strong { font-size: 1.4rem; }
+.gauge__bar { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.gauge__fill { height: 100%; border-radius: 999px; background: var(--success); transition: width 0.4s; }
+.gauge.warn .gauge__fill { background: var(--warning); }
+.gauge.bad .gauge__fill { background: #ef4444; }
+.gauge.bad .gauge__top strong { color: #ef4444; }
+
+.course { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 0.8rem; align-items: center; padding: 0.8rem 0.9rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.course.clickable { cursor: pointer; }
+.course.clickable:hover { border-color: var(--primary); }
+.course.on { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 25%, transparent); }
+.course__time { display: flex; flex-direction: column; align-items: center; font-weight: 800; line-height: 1.2; }
+.course__time small { font-weight: 500; color: var(--text-muted); }
+.course__body { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.course__body strong { overflow-wrap: anywhere; }
+.course__badges { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; }
+.course__note { font-size: 0.78rem; color: var(--text-muted); text-align: right; }
+
+.step-title { margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+
+@media (max-width: 600px) {
+  .course { grid-template-columns: 52px minmax(0, 1fr); }
+  .course__badges { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+  .course__note { text-align: left; }
+}
+.topnav { flex-wrap: wrap; row-gap: 0.25rem; }
+/* Cloche flottante (grand écran) */
+.floating-bell { display: none; }
+@media (min-width: 901px) {
+  .floating-bell { display: block; position: fixed; top: 14px; right: 18px; z-index: 40; }
+  .floating-bell .notif__btn { background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); }
+}

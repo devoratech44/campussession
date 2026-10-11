@@ -1,0 +1,109 @@
+/* frontend/src/styles/theme.css */
+
+/* ============ Base commune ============ */
+:root {
+  --radius: 14px;
+  --radius-sm: 10px;
+  --tap: 44px;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --present: #16a34a;
+  --retard: #f59e0b;
+  --absent: #ef4444;
+}
+
+/* ============ Ambiance ADMIN / défaut : vert - bleu - blanc (clair) ============ */
+:root,
+[data-space='admin'] {
+  --bg: #f3f8f6;
+  --bg-grad: radial-gradient(1200px 500px at 10% -10%, rgba(22, 163, 74, 0.12), transparent 60%),
+             radial-gradient(1000px 500px at 100% 0%, rgba(37, 99, 235, 0.10), transparent 60%);
+  --surface: #ffffff;
+  --surface-2: #eaf3ef;
+  --text: #0c1b14;
+  --text-muted: #51655a;
+  --border: #d7e5dd;
+
+  --primary: #15803d;
+  --primary-contrast: #ffffff;
+  --accent: #2563eb;
+  --gradient: linear-gradient(135deg, #16a34a 0%, #0d9488 50%, #2563eb 100%);
+  --glow: 0 8px 24px rgba(22, 163, 74, 0.25);
+  --shadow: 0 6px 20px rgba(12, 27, 20, 0.07);
+  --card-bg: var(--surface);
+  --card-border: var(--border);
+  --sidebar-bg: linear-gradient(180deg, #0f5132 0%, #0b3b6b 100%);
+  --sidebar-text: #e9f6ef;
+}
+
+/* ============ Ambiance ADMIN : mode sombre ============ */
+:root[data-theme='dark'],
+:root[data-theme='dark'] [data-space='admin'] {
+  --bg: #07130e;
+  --bg-grad: radial-gradient(1200px 500px at 10% -10%, rgba(34, 197, 94, 0.14), transparent 60%),
+             radial-gradient(1000px 500px at 100% 0%, rgba(59, 130, 246, 0.14), transparent 60%);
+  --surface: #0f1f18;
+  --surface-2: #152a21;
+  --text: #e8f4ed;
+  --text-muted: #9bb7a8;
+  --border: #223a2f;
+
+  --primary: #22c55e;
+  --primary-contrast: #052e16;
+  --accent: #60a5fa;
+  --gradient: linear-gradient(135deg, #22c55e 0%, #14b8a6 50%, #3b82f6 100%);
+  --glow: 0 8px 28px rgba(34, 197, 94, 0.28);
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --card-bg: var(--surface);
+  --card-border: var(--border);
+  --sidebar-bg: linear-gradient(180deg, #06241a 0%, #071d3a 100%);
+}
+
+/* ============ Ambiance TECH (professeur + étudiant) : clair ============ */
+[data-space='tech'] {
+  --bg: #f4f6ff;
+  --bg-grad: radial-gradient(1000px 520px at 0% -10%, rgba(124, 58, 237, 0.14), transparent 60%),
+             radial-gradient(900px 520px at 100% 0%, rgba(6, 182, 212, 0.14), transparent 60%);
+  --surface: #ffffff;
+  --surface-2: #eceffd;
+  --text: #11142b;
+  --text-muted: #5a6086;
+  --border: #dcdff5;
+
+  --primary: #6d28d9;
+  --primary-contrast: #ffffff;
+  --accent: #0891b2;
+  --gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #06b6d4 100%);
+  --glow: 0 8px 28px rgba(124, 58, 237, 0.30);
+  --shadow: 0 8px 24px rgba(40, 30, 110, 0.10);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: #dcdff5;
+  --sidebar-bg: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
+  --sidebar-text: #e8e9ff;
+}
+
+/* ============ Ambiance TECH : mode sombre (néon) ============ */
+:root[data-theme='dark'] [data-space='tech'] {
+  --bg: #060816;
+  --bg-grad: radial-gradient(1000px 520px at 0% -10%, rgba(139, 92, 246, 0.25), transparent 60%),
+             radial-gradient(900px 520px at 100% 0%, rgba(34, 211, 238, 0.18), transparent 60%);
+  --surface: #0d1128;
+  --surface-2: #131a3a;
+  --text: #e8ecff;
+  --text-muted: #8f98c9;
+  --border: #232a55;
+
+  --primary: #8b5cf6;
+  --primary-contrast: #ffffff;
+  --accent: #22d3ee;
+  --gradient: linear-gradient(135deg, #8b5cf6 0%, #6366f1 45%, #22d3ee 100%);
+  --glow: 0 0 28px rgba(139, 92, 246, 0.45);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --card-bg: rgba(19, 26, 58, 0.65);
+  --card-border: rgba(139, 92, 246, 0.28);
+  --sidebar-bg: linear-gradient(180deg, #080b22 0%, #14103a 100%);
+}

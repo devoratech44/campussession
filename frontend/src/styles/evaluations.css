@@ -1,0 +1,10 @@
+/* frontend/src/styles/evaluations.css */
+.note-input { width: 84px; text-align: center; font-weight: 700; }
+.note-comment { min-width: 160px; width: 100%; }
+.eval-stats { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; align-items: center; }
+.eval-stats strong { font-size: 1.05rem; }
+.dirty-row { background: color-mix(in srgb, var(--warning) 10%, transparent); }
+.mark-ok { color: var(--success); font-weight: 800; }
+.mark-ko { color: var(--danger, #ef4444); font-weight: 800; }
+.moy-table th, .moy-table td { text-align: center; white-space: nowrap; }
+.moy-table th:first-child, .moy-table td:first-child { text-align: left; }

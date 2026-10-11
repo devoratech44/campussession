@@ -1,0 +1,58 @@
+/* frontend/src/styles/presence.css */
+
+/* ===================== Navigation horizontale (professeur, étudiant) ===================== */
+.topnav { display: flex; gap: 0.4rem; overflow-x: auto; padding: 0.55rem 1rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+.topnav a { display: inline-flex; align-items: center; gap: 0.5rem; flex-shrink: 0; min-height: var(--tap); padding: 0 1rem; border-radius: 999px; color: var(--text); font-weight: 700; font-size: 0.92rem; }
+.topnav a:hover { text-decoration: none; background: var(--surface-2); }
+.topnav a.active { background: var(--gradient); color: #fff; box-shadow: var(--glow); }
+
+/* ===================== Signature ===================== */
+.sig-pad { display: flex; flex-direction: column; gap: 0.6rem; max-width: 460px; width: 100%; }
+.sig-pad canvas { width: 100%; height: auto; touch-action: none; cursor: crosshair; border: 2px dashed var(--primary); border-radius: var(--radius); background: #fff; }
+.sig-pad .sig-hint { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.sig-img { max-width: 100%; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; }
+
+/* ===================== Session en direct ===================== */
+.live-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+.meta-line { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; color: var(--text-muted); font-size: 0.92rem; }
+.meta-line span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.live-status { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+.countdown-big { font-size: 1.6rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.count-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 700px) { .count-grid { grid-template-columns: repeat(4, 1fr); } }
+.count-box { text-align: center; padding: 0.9rem; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); }
+.count-box strong { display: block; font-size: 1.8rem; line-height: 1.1; }
+.count-box.present strong { color: var(--present); }
+.count-box.retard strong { color: var(--retard); }
+.count-box.absent strong { color: var(--absent); }
+
+.qr-box { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: center; }
+.qr { background: #fff; padding: 12px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); max-width: 100%; height: auto; }
+
+.code-box { text-align: center; border: 2px dashed var(--primary); }
+.code-big { font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: clamp(2.2rem, 9vw, 3.6rem); font-weight: 800; letter-spacing: 0.35em; padding-left: 0.35em; color: var(--primary); user-select: all; }
+
+.retard-input { display: flex; align-items: center; gap: 0.35rem; }
+.retard-input input { width: 84px; min-height: 40px; }
+.retard-input .icon-btn { width: 40px; height: 40px; }
+
+.seance-card { display: flex; flex-direction: column; gap: 0.7rem; }
+.seance-card h3 { margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+.date-nav { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.date-nav input { width: auto; }
+
+.result-box { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.75rem; padding: 1rem 0; }
+.result-box .ico { width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--present); box-shadow: var(--glow); }
+.result-box .ico.late { background: var(--retard); }
+.code-input { text-align: center; font-family: ui-monospace, Consolas, monospace; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; }
+
+/* Scanner QR intégré */
+.qrscan { position: fixed; inset: 0; z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, 0.85); }
+.qrscan__box { position: relative; width: 100%; max-width: 420px; padding: 16px; border-radius: 16px; background: #0b1f14; color: #fff; }
+.qrscan__close { position: absolute; top: 8px; right: 8px; z-index: 2; width: 40px; height: 40px; border: 0; border-radius: 50%; color: #fff; background: rgba(255, 255, 255, 0.15); cursor: pointer; }
+.qrscan__view { position: relative; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; background: #000; }
+.qrscan__view video { width: 100%; height: 100%; object-fit: cover; }
+.qrscan__frame { position: absolute; inset: 14%; border: 3px solid #22c55e; border-radius: 12px; box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.35); }
+.qrscan__hint { margin: 12px 0 0; text-align: center; font-size: 0.92rem; opacity: 0.9; }
+.qrscan__photo { display: flex; justify-content: center; gap: 0.5rem; margin-top: 12px; cursor: pointer; color: #fff; border-color: rgba(255, 255, 255, 0.35); }

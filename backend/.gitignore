@@ -1,0 +1,7 @@
+# backend/.gitignore
+node_modules/
+.env
+uploads/documents/*
+uploads/profils/*
+!uploads/profils/default.png
+*.log

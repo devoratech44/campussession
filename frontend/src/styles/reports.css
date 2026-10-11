@@ -1,0 +1,15 @@
+/* frontend/src/styles/reports.css */
+.kpi-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.kpi { padding: 0.9rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); display: flex; flex-direction: column; gap: 2px; }
+.kpi small { color: var(--text-muted); font-weight: 600; }
+.kpi strong { font-size: 1.6rem; line-height: 1.1; }
+.kpi.good strong { color: var(--success); }
+.kpi.bad strong { color: var(--danger, #ef4444); }
+.chart-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.chart-card { padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.chart-card h3 { margin: 0 0 0.6rem; font-size: 1rem; }
+.rep-table th, .rep-table td { text-align: center; white-space: nowrap; }
+.rep-table th:first-child, .rep-table td:first-child { text-align: left; }
+.rate-bad { color: var(--danger, #ef4444); font-weight: 800; }
+.rate-ok { color: var(--success); font-weight: 800; }
+@media (max-width: 600px) { .chart-grid { grid-template-columns: 1fr; } }
