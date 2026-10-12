@@ -10,7 +10,40 @@ const transporter = nodemailer.createTransport({
   port: env.mail.port,
   secure: env.mail.port === 465,
   auth: { user: env.mail.user, pass: env.mail.pass },
+  connectionTimeout: 8000,
+  greetingTimeout: 8000,
+  socketTimeout: 10000,
 });
+
+const SEND_TIMEOUT_MS = Number(process.env.MAIL_TIMEOUT_MS) || 10000;
+const USE_BREVO = (process.env.MAIL_PROVIDER || '').toLowerCase() === 'brevo' && Boolean(process.env.BREVO_API_KEY);
+
+// « Nom <adresse> » -> { name, email }
+function parseFrom(from) {
+  const m = String(from || '').match(/^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/);
+  return m ? { name: m[1].trim() || cfg.appName, email: m[2].trim() } : { name: cfg.appName, email: String(from || env.mail.user).trim() };
+}
+
+// Envoi unique : API Brevo (HTTPS, port 443) ou SMTP, avec délai maximal
+async function sendMail({ to, subject, text, html }) {
+  const run = async () => {
+    if (USE_BREVO) {
+      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: { 'api-key': process.env.BREVO_API_KEY, 'content-type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify({ sender: parseFrom(env.mail.from), to: [{ email: to }], subject, textContent: text, htmlContent: html }),
+        signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
+      });
+      if (!res.ok) throw new Error(`Brevo ${res.status} ${(await res.text()).slice(0, 200)}`);
+      return;
+    }
+    await transporter.sendMail({ from: env.mail.from, to, subject, text, html });
+  };
+  await Promise.race([
+    run(),
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`délai de ${SEND_TIMEOUT_MS / 1000} s dépassé`)), SEND_TIMEOUT_MS + 1000)),
+  ]);
+}
 
 async function sendVerificationCode(user, code) {
   const minutes = cfg.verification.validityMinutes;
@@ -29,8 +62,7 @@ async function sendVerificationCode(user, code) {
   </div>`;
 
   try {
-    await transporter.sendMail({
-      from: env.mail.from,
+    await sendMail({
       to: user.email,
       subject: `${code} est votre code ${cfg.appName}`,
       text: `Bonjour ${user.prenom}, votre code de vérification ${cfg.appName} est : ${code} (valable ${minutes} minutes).`,
@@ -55,7 +87,7 @@ const longDate = (iso) => {
 
 async function deliver({ to, subject, text, html }) {
   try {
-    await transporter.sendMail({ from: env.mail.from, to, subject, text, html });
+    await sendMail({ to, subject, text, html });
     logger.success('MAIL', `Envoyé à ${to} : ${subject}`);
     return true;
   } catch (err) {
