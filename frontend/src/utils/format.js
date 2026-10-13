@@ -6,4 +6,9 @@ export const errorMessage = (err, fallback = 'Une erreur est survenue.') => {
   return err.response.data?.message || fallback;
 };
 
+export const onPhotoError = (e) => {
+  const fallback = photoUrl(env.defaultPhoto);
+  if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
+};
+
 export const photoUrl = (name) => `${env.filesUrl}/profils/${name}`;

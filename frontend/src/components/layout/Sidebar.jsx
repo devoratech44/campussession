@@ -6,7 +6,7 @@ import { LogOut, X } from 'lucide-react';
 import env from '../../config/env';
 import { useAuth } from '../../contexts/AuthContext';
 import { ROLE_LABEL } from '../../utils/roles';
-import { photoUrl } from '../../utils/format';
+import { photoUrl, onPhotoError } from '../../utils/format';
 import Logo from '../common/Logo';
 import ThemeToggle from '../common/ThemeToggle';
 
@@ -54,7 +54,7 @@ export default function Sidebar({ items, open, onClose }) {
 
         <div className="sidebar-foot">
           <div className="user-chip">
-            <img src={photoUrl(user.photo)} alt={`Photo de ${user.prenom}`} />
+            <img src={photoUrl(user.photo)} alt={`Photo de ${user.prenom}`} onError={onPhotoError} />
             <div className="who">
               <strong>{user.prenom} {user.nom}</strong>
               <br />
