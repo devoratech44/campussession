@@ -16,6 +16,8 @@ const transporter = nodemailer.createTransport({
 });
 
 const SEND_TIMEOUT_MS = Number(process.env.MAIL_TIMEOUT_MS) || 10000;
+const LOGO_URL = process.env.MAIL_LOGO_URL || `${cfg.sessions.publicUrl}/logo.png`;
+const logoImg = `<img src="${LOGO_URL}" alt="${cfg.appName}" width="56" height="56" style="display:block;margin:0 auto 8px;border-radius:12px;background:#fff">`;
 const USE_BREVO = (process.env.MAIL_PROVIDER || '').toLowerCase() === 'brevo' && Boolean(process.env.BREVO_API_KEY);
 
 // « Nom <adresse> » -> { name, email }
@@ -50,6 +52,7 @@ async function sendVerificationCode(user, code) {
   const html = `
   <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;border:1px solid #d7e5dd;border-radius:14px;overflow:hidden">
     <div style="background:linear-gradient(135deg,#16a34a,#2563eb);padding:20px;color:#fff;text-align:center">
+      ${logoImg}
       <h2 style="margin:0">${cfg.appName}</h2>
       <p style="margin:4px 0 0">Suivre – apprendre – progresser</p>
     </div>
@@ -108,6 +111,7 @@ function compose({ heading, intro, rows = [], outro, cta }) {
   const html = `
   <div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;border:1px solid #d7e5dd;border-radius:14px;overflow:hidden">
     <div style="background:linear-gradient(135deg,#16a34a,#2563eb);padding:18px;color:#fff;text-align:center">
+      ${logoImg}
       <h2 style="margin:0">${esc(cfg.appName)}</h2><p style="margin:4px 0 0">${esc(heading)}</p>
     </div>
     <div style="padding:22px;color:#0c1b14">
