@@ -6,6 +6,7 @@ export const SEANCE_STATUS = {
   ouverte: { label: 'Ouverte', cls: 'badge-ok' },
   fermee: { label: 'Fermée', cls: '' },
   annulee: { label: 'Annulée', cls: 'badge-ko' },
+  a_venir: { label: 'À venir', cls: 'badge-info' },
 };
 
 export const PRESENCE_STATUS = {

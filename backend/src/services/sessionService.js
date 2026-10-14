@@ -619,6 +619,53 @@ async function processSeance(s, now) {
   if (s.statut === 'ouverte' && s.autoFermeAt && t >= s.autoFermeAt.getTime()) await closeSeance(s, { auto: true });
 }
 
+// Séances « à venir » : créneaux de l'emploi du temps sans séance créée, sur une plage de dates
+async function virtualSeances({ from, to, professeurId, enseignementIds }) {
+  const MAX_DAYS = 60;
+  const start = new Date(`${from}T00:00:00`);
+  const end = new Date(`${to}T00:00:00`);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return [];
+  const todayKey = dateKey(new Date());
+  const nowMs = Date.now();
+
+  const where = {};
+  if (professeurId) where.professeurId = professeurId;
+  if (enseignementIds) where.id = enseignementIds;
+  const list = await Enseignement.findAll({ where, include: ens.INCLUDES });
+  if (!list.length) return [];
+  const byId = new Map(list.map((e) => [e.id, e]));
+  const slots = await EmploiDuTemps.findAll({ where: { enseignementId: [...byId.keys()] } });
+  const existing = await Seance.findAll({
+    where: { dateSeance: { [Op.between]: [from, to] }, creneauId: { [Op.ne]: null } },
+    attributes: ['creneauId', 'dateSeance'],
+  });
+  const taken = new Set(existing.map((s) => `${s.creneauId}|${s.dateSeance}`));
+
+  const out = [];
+  for (let i = 0; i <= MAX_DAYS; i += 1) {
+    const day = new Date(start.getTime() + i * 24 * 60 * MIN);
+    if (day > end) break;
+    const date = dateKey(day);
+    const jour = ((day.getDay() + 6) % 7) + 1;
+    for (const slot of slots) {
+      if (slot.jour !== jour) continue;
+      if (slot.dateDebut && slot.dateDebut > date) continue;
+      if (slot.dateFin && slot.dateFin < date) continue;
+      if (taken.has(`${slot.id}|${date}`)) continue;
+      const startAt = atMinutes(date, time.parse(slot.heureDebut));
+      // Passé et jamais ouvert : pas affiché comme « à venir »
+      if (date < todayKey || startAt.getTime() <= nowMs - S.openBeforeMin * MIN) continue;
+      const base = serializeSeance({ toJSON: () => ({
+        id: null, enseignementId: slot.enseignementId, creneauId: slot.id, dateSeance: date,
+        heureDebut: slot.heureDebut, heureFin: slot.heureFin, salle: slot.salle, statut: 'a_venir',
+        enseignement: byId.get(slot.enseignementId).toJSON(),
+      }) }, { total: 0, present: 0, retard: 0, absent: 0 });
+      out.push({ ...base, id: `v-${slot.id}-${date}`, virtuelle: true, ouvreA: hhmm(new Date(startAt.getTime() - S.openBeforeMin * MIN)) });
+    }
+  }
+  return out.sort((a, b) => `${a.date}${a.heureDebut}`.localeCompare(`${b.date}${b.heureDebut}`));
+}
+
 async function tick() {
   const now = new Date();
   await generateForToday(now);
@@ -640,5 +687,5 @@ async function tick() {
 module.exports = {
   SEANCE_ATTRS, findSeance, newSeance, serializeSeance, countsFor, getDetail,
   openSeance, closeSeance, cancelSeance, signSeance, setRetard, adminSetPresence,
-  pointageInfo, pointageCourant, saveSignature, checkIn, pointerPour, qrFor, tick,
+  pointageInfo, pointageCourant, saveSignature, checkIn, pointerPour, qrFor, virtualSeances, tick,
 };

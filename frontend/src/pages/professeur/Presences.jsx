@@ -51,6 +51,22 @@ export default function Presences() {
         {items.map((s) => {
           const st = SEANCE_STATUS[s.statut];
           const e = s.enseignement;
+          if (s.virtuelle) {
+            return (
+              <div key={s.id} className="card seance-card" style={{ opacity: 0.85 }}>
+                <h3>{e.module.code} · {s.heureDebut} - {s.heureFin}</h3>
+                <span className="muted">{e.module.nom}</span>
+                <div className="meta-line">
+                  <span><Layers size={16} /> {PUBLIC_TYPES[e.publicType]} : {e.publicLabel}</span>
+                  <span><DoorOpen size={16} /> {s.salle || '—'}</span>
+                </div>
+                <div className="row row-between">
+                  <span className={`badge ${st.cls}`}>{st.label}</span>
+                  <small className="muted">Ouverture à {s.ouvreA}</small>
+                </div>
+              </div>
+            );
+          }
           return (
             <Link key={s.id} to={`/professeur/presences/${s.id}`} className="card card-hover seance-card" style={{ color: 'var(--text)' }}>
               <h3>{e.module.code} · {s.heureDebut} - {s.heureFin}</h3>

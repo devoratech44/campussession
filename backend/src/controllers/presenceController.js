@@ -52,9 +52,20 @@ exports.listSeances = asyncHandler(async (req, res) => {
   });
 
   const counts = await svc.countsFor(rows);
+  let items = rows.map((s) => svc.serializeSeance(s, counts[s.id]));
+
+  // Séances à venir (professeur : les siennes ; admin : toutes), seulement si aucun filtre de statut n'est posé
+  if (q.avenir !== 'false' && !q.statut && DATE.test(q.dateDebut || '') && DATE.test(q.dateFin || '')) {
+    const virtual = await svc.virtualSeances({
+      from: q.dateDebut, to: q.dateFin,
+      professeurId: req.user.role === 'professeur' ? req.user.id : asId(q.professeurId),
+    });
+    items = [...items, ...virtual.filter((v) => !asId(q.moduleId) || v.enseignement.module.id === asId(q.moduleId))]
+      .sort((a, b) => `${a.date}${a.heureDebut}`.localeCompare(`${b.date}${b.heureDebut}`) * (q.ordre === 'asc' ? 1 : -1));
+  }
   res.json({
     success: true,
-    data: { items: rows.map((s) => svc.serializeSeance(s, counts[s.id])), total: count, page, limit, pages: Math.max(1, Math.ceil(count / limit)) },
+    data: { items, total: count + (items.length - rows.length), page, limit, pages: Math.max(1, Math.ceil(count / limit)) },
   });
 });
 
