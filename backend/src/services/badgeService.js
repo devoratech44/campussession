@@ -4,6 +4,7 @@ const { sequelize } = require('../config/database');
 const messagerie = require('./messagerieService');
 const etudiant = require('./etudiantService');
 const travaux = require('./etudiantTravauxService');
+const surveillance = require('./surveillanceService');
 
 const q = (sql, replacements = {}) => sequelize.query(sql, { replacements, type: QueryTypes.SELECT });
 
@@ -13,6 +14,7 @@ async function get(user) {
   if (user.role === 'etudiant') {
     out.pointage = await etudiant.openCount(user);
     out.devoirs = (await travaux.pending(user, 100)).length;
+    out.surveillance = await surveillance.pendingCount(user.id);
   }
 
   if (user.role === 'professeur') {

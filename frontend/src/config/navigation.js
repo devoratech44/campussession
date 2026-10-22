@@ -1,7 +1,7 @@
 // frontend/src/config/navigation.js
 import {
   LayoutDashboard, Users, School, UsersRound, BookOpen, CalendarDays, ClipboardCheck,
-  NotebookPen, FolderOpen, Bell, MessageSquare, TrendingUp, Settings, ScanLine, Star, BookMarked,
+  NotebookPen, FolderOpen, Bell, MessageSquare, TrendingUp, Settings, ScanLine, Star, BookMarked, ShieldAlert,
 } from 'lucide-react';
 
 export const PROF_NAV = [
@@ -24,6 +24,7 @@ export const ETUDIANT_NAV = [
   { to: '/etudiant/presences', label: 'Mes présences', icon: ClipboardCheck },
   { to: '/etudiant/contenu', label: 'Contenu des cours', icon: BookMarked },
   { to: '/etudiant/devoirs', label: 'Devoirs', icon: NotebookPen, badge: 'devoirs' },
+  { to: '/etudiant/surveillance', label: 'Devoir surveillé', icon: ShieldAlert, badge: 'surveillance', onlyWithBadge: 'surveillance' },
   { to: '/etudiant/notes', label: 'Mes notes', icon: TrendingUp },
   { to: '/etudiant/documents', label: 'Documents', icon: FolderOpen },
   { to: '/etudiant/avis', label: 'Avis sur mes cours', icon: Star },
@@ -40,6 +41,7 @@ export const ADMIN_NAV = [
   { to: '/admin/modules', label: 'Modules', icon: BookOpen },
   { to: '/admin/emploi-du-temps', label: 'Emploi du temps', icon: CalendarDays },
   { to: '/admin/presences', label: 'Présences', icon: ClipboardCheck },
+  { to: '/admin/surveillance', label: 'Surveillance des devoirs', icon: ShieldAlert },
   { to: '/admin/evaluations', label: 'Devoirs, examens et notes', icon: NotebookPen },
   { to: '/admin/documents', label: 'Documents', icon: FolderOpen },
   { to: '/admin/notifications', label: 'Notifications', icon: Bell },

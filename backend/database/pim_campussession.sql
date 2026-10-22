@@ -473,3 +473,45 @@ WHERE e.public_type = 'classe' AND c.nom = 'CIITN 1'
 ORDER BY e.id
 LIMIT 1;
 ALTER TABLE travaux ADD COLUMN date_limite DATETIME NULL AFTER date_travail;
+
+CREATE TABLE IF NOT EXISTS `surveillances` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `titre` VARCHAR(200) NOT NULL,
+  `type` ENUM('devoir','examen') NOT NULL DEFAULT 'devoir',
+  `consignes` TEXT NULL,
+  `outils` VARCHAR(500) NULL,
+  `duree_minutes` INT NOT NULL,
+  `max_alertes` INT NOT NULL DEFAULT 3,
+  `statut` ENUM('brouillon','active','terminee') NOT NULL DEFAULT 'brouillon',
+  `started_at` DATETIME NULL,
+  `created_by` INT UNSIGNED NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `surveillance_etudiants` (
+  `surveillance_id` INT UNSIGNED NOT NULL,
+  `etudiant_id` INT UNSIGNED NOT NULL,
+  `statut` ENUM('attendu','en_cours','termine','exclu') NOT NULL DEFAULT 'attendu',
+  `alertes` INT NOT NULL DEFAULT 0,
+  `entre_at` DATETIME NULL,
+  `termine_at` DATETIME NULL,
+  PRIMARY KEY (`surveillance_id`,`etudiant_id`),
+  CONSTRAINT `fk_se_surv` FOREIGN KEY (`surveillance_id`) REFERENCES `surveillances` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_se_etu` FOREIGN KEY (`etudiant_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `surveillance_logs` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `surveillance_id` INT UNSIGNED NOT NULL,
+  `etudiant_id` INT UNSIGNED NOT NULL,
+  `type` VARCHAR(40) NOT NULL,
+  `detail` VARCHAR(255) NULL,
+  `alerte` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_sl` (`surveillance_id`,`etudiant_id`),
+  CONSTRAINT `fk_sl_surv` FOREIGN KEY (`surveillance_id`) REFERENCES `surveillances` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_sl_etu` FOREIGN KEY (`etudiant_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -118,6 +118,11 @@ statutConge: 'Congé',
     recentNotes: num(process.env.STUDENT_RECENT_NOTES, 5),
   },
 
+    surveillance: {
+    graceSeconds: num(process.env.SURV_GRACE_SECONDS, 20),
+    autoExclude: String(process.env.SURV_AUTO_EXCLUDE || 'false') === 'true',
+  },
+
   notifications: {
     types: ['information', 'devoir', 'examen', 'notes', 'presences', 'emploi_du_temps', 'systeme'],
     cibleTypes: ['tous', 'classe', 'filiere', 'groupe', 'utilisateur'],

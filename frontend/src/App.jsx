@@ -11,6 +11,9 @@ import ProfesseurLayout from './components/layout/ProfesseurLayout';
 import EtudiantLayout from './components/layout/EtudiantLayout';
 
 import Login from './pages/auth/Login';
+import Landing from './pages/public/Landing';
+import AdminSurveillance from './pages/admin/Surveillance';
+import EtudiantSurveillance from './pages/etudiant/Surveillance';
 import VerifyCode from './pages/auth/VerifyCode';
 import Blocked from './pages/auth/Blocked';
 
@@ -60,7 +63,7 @@ function Home() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Landing />} />
       <Route path="/connexion" element={<Login />} />
       <Route path="/verification" element={<VerifyCode />} />
       <Route path="/bloque" element={<Blocked />} />
@@ -73,8 +76,9 @@ export default function App() {
         <Route path="/admin/groupes" element={<AdminGroupes />} />
         <Route path="/admin/modules" element={<AdminModules />} />
         <Route path="/admin/emploi-du-temps" element={<AdminEmploiDuTemps />} />
-<Route path="/admin/presences" element={<AdminPresences />} />
+        <Route path="/admin/presences" element={<AdminPresences />} />
         <Route path="/admin/notifications" element={<AdminNotifications />} />
+        <Route path="/admin/surveillance" element={<AdminSurveillance />} />
         <Route path="/admin/evaluations" element={<AdminEvaluations />} />
         <Route path="/admin/documents" element={<AdminDocuments />} />
         <Route path="/admin/messagerie" element={<AdminMessagerie />} />
@@ -110,6 +114,7 @@ export default function App() {
         <Route path="/etudiant/notes" element={<EtudiantNotes />} />
         <Route path="/etudiant/documents" element={<EtudiantDocuments />} />
         <Route path="/etudiant/avis" element={<EtudiantAvis />} />
+        <Route path="/etudiant/surveillance" element={<EtudiantSurveillance />} />
         <Route path="/etudiant/contenu" element={<EtudiantContenu />} />
       </Route>
 

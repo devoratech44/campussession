@@ -42,7 +42,7 @@ export default function Sidebar({ items, open, onClose }) {
         </div>
 
         <nav className="sidebar-nav" aria-label="Navigation principale">
-          {items.map(({ to, label, icon: Icon, end, soon, badge }) => (
+          {items.filter((i) => !i.onlyWithBadge || badges[i.onlyWithBadge] > 0).map(({ to, label, icon: Icon, end, soon, badge }) => (
             <NavLink key={to} to={to} end={end} onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <Icon size={20} />
               <span>{label}</span>

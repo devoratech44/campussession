@@ -24,5 +24,6 @@ router.use('/rapports', require('./reportRoutes'));
 router.use('/etudiant', require('./etudiantRoutes'));
 router.use('/professeur', require('./professeurRoutes'));
 router.use('/badges', require('./badgeRoutes'));
+router.use('/surveillance', require('./surveillanceRoutes'));
 
 module.exports = router;
