@@ -25,7 +25,7 @@ export default function Surveillance() {
   const [phase, setPhase] = useState('intro'); // intro | running | ended
   const [endAt, setEndAt] = useState(0);
   const [left, setLeft] = useState(0);
-  const [warn, setWarn] = useState(null);
+
   const [away, setAway] = useState(false);
   const [exclu, setExclu] = useState(false);
   const [reason, setReason] = useState('');
@@ -47,9 +47,7 @@ export default function Surveillance() {
 
   const send = useCallback(async (type, dureeSec) => {
     try {
-      const { data: r } = await api.post(`/surveillance/${idRef.current}/event`, { type, dureeSec });
-      setWarn(r.data);
-      if (r.data.statut === 'exclu') { setExclu(true); setPhase('ended'); }
+      await api.post(`/surveillance/${idRef.current}/event`, { type, dureeSec });
     } catch { /* ignoré */ }
   }, []);
 
@@ -133,8 +131,7 @@ export default function Surveillance() {
           <strong>{s.titre}</strong>
           <span className="countdown-big"><Timer size={22} style={{ verticalAlign: 'text-bottom' }} /> {formatCountdown(left)}</span>
         </div>
-        {away && <div className="alert alert-error"><CircleAlert size={18} />Vous avez quitté la page : la sortie est enregistrée.</div>}
-        {warn && warn.alertes > 0 && <div className="alert alert-error"><CircleAlert size={18} />Avertissement {warn.alertes} / {warn.maxAlertes}. Au-delà, vous serez exclu et la note sera de 00/20.</div>}
+        {away && <div className="alert alert-info"><Eye size={18} />Sortie enregistrée dans le journal. Vous pouvez travailler dans vos outils autorisés.</div>}
         <div className="card stack">
           <h3 style={{ margin: 0 }}>Consignes</h3>
           <p style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{s.consignes || 'Aucune consigne particulière.'}</p>
@@ -153,9 +150,8 @@ export default function Surveillance() {
         <ul style={{ margin: 0, paddingLeft: '1.2rem' }}>
           <li>Outils autorisés : <strong>{s.outils || 'précisés par l’administrateur'}</strong>. Ni intelligence artificielle, ni recherche sur internet.</li>
           <li>Toute photo du sujet avec un téléphone est interdite et sanctionnée.</li>
-          <li>Quitter cette page est enregistré. Après {data.graceSeconds} secondes hors de la page, vous recevez un avertissement ({s.maxAlertes} maximum).</li>
-          <li>En cas de fraude : note de <strong>00/20</strong> et exclusion.</li>
-          <li><strong>L&apos;administrateur consulte le journal de vos entrées et sorties</strong>, même sans avertissement.</li>
+          <li>Vous pouvez quitter cette page pour travailler dans vos outils autorisés : chaque sortie et chaque retour sont enregistrés.</li>
+          <li><strong>L&apos;administrateur consulte le journal de toutes vos entrées et sorties.</strong></li>
           <li>À la fin du temps, une sonnerie retentit : vous devez vous arrêter immédiatement.</li>
         </ul>
         <div><button type="button" className="btn" onClick={start}>Commencer</button></div>

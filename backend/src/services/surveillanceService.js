@@ -15,6 +15,15 @@ const log = (sid, eid, type, detail = null, alerte = 0) =>
 
 // ---------- Administrateur ----------
 async function list() {
+  try {
+    return await listInner();
+  } catch (err) {
+    logger.error('SURV', `list : ${err.original?.sqlMessage || err.parent?.sqlMessage || err.message}`);
+    throw err;
+  }
+}
+
+async function listInner() {
   return q(`SELECT s.id, s.titre, s.type, s.duree_minutes AS dureeMinutes, s.max_alertes AS maxAlertes, s.statut, s.started_at AS startedAt, s.outils,
     (SELECT COUNT(*) FROM surveillance_etudiants e WHERE e.surveillance_id = s.id) AS nbEtudiants,
     (SELECT COUNT(*) FROM surveillance_etudiants e WHERE e.surveillance_id = s.id AND e.statut = 'en_cours') AS nbEnCours,
@@ -106,20 +115,9 @@ async function event(user, id, { type, dureeSec }) {
   if (!cur.surveillance || cur.surveillance.id !== id || cur.etat.statut !== 'en_cours') throw new ApiError(409, 'Session non active.');
   if (!EVENTS.includes(type)) throw new ApiError(400, 'Événement inconnu.');
   const sec = Math.max(0, Math.min(86400, Number(dureeSec) || 0));
-  const alerte = (type === 'sortie' && sec > S.graceSeconds) || type === 'raccourci' ? 1 : 0;
-  await log(id, user.id, type, type === 'sortie' ? `Hors de la page ${sec} s` : null, alerte);
-  let { alertes } = cur.etat;
-  let statut = 'en_cours';
-  if (alerte) {
-    alertes += 1;
-    await run('UPDATE surveillance_etudiants SET alertes = :a WHERE surveillance_id = :id AND etudiant_id = :uid', { a: alertes, id, uid: user.id });
-    if (S.autoExclude && alertes >= cur.surveillance.maxAlertes) {
-      await run("UPDATE surveillance_etudiants SET statut = 'exclu', termine_at = UTC_TIMESTAMP() WHERE surveillance_id = :id AND etudiant_id = :uid", { id, uid: user.id });
-      await log(id, user.id, 'exclusion', 'Seuil d’avertissements atteint', 1);
-      statut = 'exclu';
-    }
-  }
-  return { statut, alertes, maxAlertes: cur.surveillance.maxAlertes };
+  // Journal uniquement : aucun avertissement, aucun blocage
+  await log(id, user.id, type, type === 'sortie' ? `Hors de la page ${sec} s` : null, 0);
+  return { statut: 'en_cours' };
 }
 
 async function terminer(user, id) {

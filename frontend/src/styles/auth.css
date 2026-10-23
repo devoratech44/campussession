@@ -122,3 +122,4 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 
 /* ---------- Compte bloqué ---------- */
 .blocked-icon { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
+button.contact-link { background: none; border: 0; font: inherit; cursor: pointer; }

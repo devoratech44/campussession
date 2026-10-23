@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, LogIn, User, Lock, Server, CircleAlert, Info, Compass, BookOpen, TrendingUp, UserPlus } from 'lucide-react';
 import env from '../../config/env';
-import { buildAccountRequestMailto } from '../../config/accountRequest';
+import ContactModal from '../../components/landing/ContactModal';
+import '../../styles/landing.css';
 import { useAuth } from '../../contexts/AuthContext';
 import useServerStatus from '../../hooks/useServerStatus';
 import { errorMessage } from '../../utils/format';
@@ -28,6 +29,7 @@ export default function Login() {
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [contact, setContact] = useState(false);
 
   const mottoWords = (env.motto || '').split(/\s*[–—-]\s*/).filter(Boolean);
 
@@ -117,7 +119,7 @@ export default function Login() {
 
         <p className="auth-contact">
           Vous n&apos;avez pas de compte ?{' '}
-          <a className="contact-link" href={buildAccountRequestMailto()}><UserPlus size={18} /> Contactez l&apos;administrateur</a>
+          <button type="button" className="contact-link" onClick={() => setContact(true)}><UserPlus size={18} /> Contactez l&apos;administrateur</button>
         </p>
 
         <div className="auth-meta">
@@ -133,6 +135,7 @@ export default function Login() {
           </span>
         </div>
       </main>
+      {contact && <div className="lp"><ContactModal onClose={() => setContact(false)} /></div>}
     </div>
   );
 }
